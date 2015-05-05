@@ -117,12 +117,14 @@ class Buffer extends EventEmitter implements WritableStreamInterface
 
         $this->data = (string) substr($this->data, $sent);
 
-        if (0 === strlen($this->data)) {
+        // this check breaks connection and data cannot be fully transfered to server on multipart/form-data post request
+        // possibly, should be another check.
+        /*if (0 === strlen($this->data)) {
             $this->loop->removeWriteStream($this->stream);
             $this->listening = false;
 
             $this->emit('full-drain', [$this]);
-        }
+        }*/
     }
 
     private function errorHandler($errno, $errstr, $errfile, $errline)
